@@ -1,17 +1,20 @@
 import logging
+import logging.handlers
 import os
 
 
-def initialize_logger(
+def initialize_simple_logger(
     name: str,
     dir: str = "logs",
     filename: str = None,
     fmt: str = logging.BASIC_FORMAT,
     level: int | str = logging.WARNING,
     handler_level: int | str = logging.NOTSET,
+    maxBytes: int = 500,
+    backupCount: int = 2,
 ) -> None:
     """
-    Initialize the Logger.
+    Initialize the Simple logger.
 
     Args:
         name: Set a name for logging.
@@ -22,6 +25,8 @@ def initialize_logger(
         fmt: This string sets the format for logging.
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
+        maxBytes: File size for logging.
+        backupCount: Backup counts for logging.
     """
 
     if filename is None:
@@ -35,7 +40,9 @@ def initialize_logger(
     stream_handler.setFormatter(formatter)
     stream_handler.setLevel(handler_level)
 
-    file_handler = logging.FileHandler(filename)
+    file_handler = logging.handlers.RotatingFileHandler(
+        filename, maxBytes=maxBytes, backupCount=backupCount
+    )
     file_handler.setFormatter(formatter)
     file_handler.setLevel(handler_level)
 
