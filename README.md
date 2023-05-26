@@ -90,6 +90,7 @@ example
 Here is an example of a custom package.
 
 ```python:mypackage/__init__.py
+# mypackage/__init__.py
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -102,6 +103,7 @@ def hello():
 Here is an example of the main program.
 
 ```python:example.py
+# example.py
 from logging import getLogger, WARNING, INFO, DEBUG
 from logging_support import initialize_logger
 
