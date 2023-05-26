@@ -5,7 +5,7 @@ This [logging_support](https://github.com/naoyoshinori/logging_support) library 
 ## 1. Install
 
 ```bash
-pip install https://github.com/naoyoshinori/logging_support/archive/main.zi
+pip install https://github.com/naoyoshinori/logging_support/archive/main.zip
 ```
 
 ## 2. Usage
@@ -48,7 +48,7 @@ initialize_logger(
 
 ### 2.5 Logging
 
-See the Python logging documentation for details.
+See the [Python logging](https://docs.python.org/3/library/logging.html) documentation for details.
 
 ```python
 logger.debug("debug message.")
