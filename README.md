@@ -103,7 +103,7 @@ example
    __init__.py
 ```
 
-Here is an example of mypackage, which uses getLogger from the standard logging library.
+Here is an example of mypackage, which uses `getLogger` from the Python standard logging library.
 
 ```python
 # mypackage/__init__.py
@@ -115,7 +115,7 @@ def hello():
     logger.debug("hello, world!")
 ```
 
-Here is an example of the main program. Here we initialize the logger for each module, using basicConfig from the Python standard library logging, there is a problem with all logs being output.
+Here is an example of the main program. Here we initialize the logger for each module, using `basicConfig` from the Python standard library logging, there is a problem with all logs being output.
 
 ```python
 # example.py
