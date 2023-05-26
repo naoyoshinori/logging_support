@@ -1,0 +1,9 @@
+[project]
+name = "logging_support"
+description = "logging support package"
+version = "0.1.0"
+authors = [
+    { name = "Naoyuki Yoshinori", email = "1448309+naoyoshinori@users.noreply.github.com" },
+]
+readme = "README.md"
+license = { file = "LICENSE" }
