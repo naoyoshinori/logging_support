@@ -1,4 +1,4 @@
-# logging_support
+# Python: logging_support
 
 This [logging_support](https://github.com/naoyoshinori/logging_support) library controls the log output of the application and library. Log data is output to both terminal and file.
 
