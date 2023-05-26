@@ -25,8 +25,8 @@ def initialize_simple_logger(
         fmt: This string sets the format for logging.
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
-        maxBytes: File size for logging.
-        backupCount: Backup counts for logging.
+        maxBytes: File size for logging. The default is 500 bytes.
+        backupCount: Backup counts for logging. The default is two files.
     """
 
     if filename is None:

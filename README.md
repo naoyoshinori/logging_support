@@ -1,6 +1,6 @@
-# Python: logging_support
+# logging_support
 
-This [logging_support](https://github.com/naoyoshinori/logging_support) library controls the log output of the application and library. Log data is output to both terminal and file.
+[logging_support](https://github.com/naoyoshinori/logging_support) is a simple logging library for Python. This library outputs log data to both the console and a file. Logging is configured on a module-by-module basis, without using the `basicConfig` of the Python standard library [logging](https://docs.python.org/3/library/logging.html).
 
 ## 1. Install
 
@@ -10,32 +10,49 @@ pip install https://github.com/naoyoshinori/logging_support/archive/main.zip
 
 ## 2. Usage
 
-### 2.1 Import package
+### 2.1 Import packages
+
+For logging in the main program.
 
 ```python
 from logging import getLogger, WARNING, INFO, DEBUG
-from logging_support import initialize_logger
+from logging_support import initialize_simple_logger
 ```
 
-### 2.2 Create a logger
+For logging with the module.
+
+```python
+from logging import getLogger
+```
+
+### 2.2 Create Logger
 
 ```python
 logger = getLogger(__name__)
+  or
+logger = getLogger("example")
 ```
 
-### 2.3 Initialize logger
+The module name can be set by using `__name__` in the logger name.
+
+### 2.3 Initialize Simple Logger
+
+Initialize the logger in the main program as follows. Set the module name to `name`. Set `dir` to the directory where log data is stored.
+
 
 ```python
-initialize_logger(
+initialize_simple_logger(
     name="example",
     dir="logs",
     fmt="%(levelname)s:%(name)s:%(message)s",
     level="WARNING",
     handler_level=DEBUG,
+    maxBytes=500,
+    backupCount=2,
 )
 ```
 
-### 2.4 List of options to initialize logger.
+### 2.4 List of options.
 
 | Keyword | Description |
 |---|---|
@@ -45,10 +62,12 @@ initialize_logger(
 | fmt | This string sets the format for logging. |
 | level | Set the level of logging. level must be an int or a str. |
 | handler_level | Set the level of the handler for logging. level must be an int or a str. |
+| maxBytes | File size for logging. The default is 500 bytes. |
+| backupCount | Backup counts for logging. The default is two files. |
 
 ### 2.5 Logging
 
-See the [Python logging](https://docs.python.org/3/library/logging.html) documentation for details.
+For more information on logging, see the documentation of the Python standard library [logging](https://docs.python.org/3/library/logging.html).
 
 ```python
 logger.debug("debug message.")
@@ -59,83 +78,79 @@ logger.error("error message.")
 
 ### 2.6 For third-party libraries
 
-Third-party libraries can also configure log output.
+Log output can also be configured in third-party libraries.
 
 ```python
 from logging import getLogger, WARNING, INFO, DEBUG
-from logging_support import initialize_logger
+from logging_support import initialize_simple_logger
 
 import selenium
-from selenium import webdriver
 
-initialize_logger(name="selenium", level=WARNING)
- or
-initialize_logger(name=selenium.__name__, level=WARNING)
- or
-initialize_logger(name=webdriver.__name__, level=WARNING)
+initialize_simple_logger(name="selenium", level=DEBUG)
+  or
+initialize_simple_logger(name=selenium.__name__, level=DEBUG)
 ```
 
 ## 3. Example
 
-Example of directory structure.
+The directory structure of Example.
 
 ```bash
 example
 │  example.py
 │  
 └─mypackage
-       __init__.py
+   __init__.py
 ```
 
-Here is an example of a custom package.
+Here is an example of mypackage, which uses getLogger from the standard logging library.
 
-```python:mypackage/__init__.py
+```python
 # mypackage/__init__.py
 from logging import getLogger
 
 logger = getLogger(__name__)
 
-
 def hello():
     logger.debug("hello, world!")
 ```
 
-Here is an example of the main program.
+Here is an example of the main program. Here we initialize the logger for each module, using basicConfig from the Python standard library logging, there is a problem with all logs being output.
 
-```python:example.py
+```python
 # example.py
 from logging import getLogger, WARNING, INFO, DEBUG
-from logging_support import initialize_logger
+from logging_support import initialize_simple_logger
 
 import mypackage
 
-logger = getLogger(__name__)
+logger = getLogger("main")
 
-initialize_logger(name=__name__, level=DEBUG)
-initialize_logger(name=mypackage.__name__, level=DEBUG)
+initialize_simple_logger(name="main", level=DEBUG)
+initialize_simple_logger(name=mypackage.__name__, level=DEBUG)
 
 logger.debug("message")
 
 mypackage.hello()
 ```
 
-The logging results are displayed in the terminal. 
+This library displays log data on the console.
 
-```
-DEBUG:__main__:message
+```bash
+DEBUG:main:message
 DEBUG:mypackage:hello, world!
 ```
 
-In addition, logging results are output as a file. The files 'logs/__main__.log' and 'logs/mypackage.log' are created.
+In addition, it outputs log data as files `logs/main.log` and `logs/mypackage.log` in the case of Example.
 
 ```bash
 example
 │  example.py
 │  
 ├─mypackage
-│      __init__.py
+│  __init__.py
 │      
 └─logs
-       __main__.log
-       mypackage.log
+   main.log
+   mypackage.log
 ```
