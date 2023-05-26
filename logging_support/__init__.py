@@ -2,12 +2,14 @@ import logging
 import logging.handlers
 import os
 
+FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+
 
 def initialize_simple_logger(
     name: str,
     dir: str = "logs",
     filename: str = None,
-    fmt: str = logging.BASIC_FORMAT,
+    fmt: str = FORMAT,
     level: int | str = logging.WARNING,
     handler_level: int | str = logging.NOTSET,
     maxBytes: int = 500,
@@ -23,6 +25,7 @@ def initialize_simple_logger(
         filename: Set the file name for logging.
             The default file name is '{dir}/{name}.log'.
         fmt: This string sets the format for logging.
+            The default format is "%(asctime)s %(levelname)s %(name)s %(message)s"
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
         maxBytes: File size for logging. The default is 500 bytes.
