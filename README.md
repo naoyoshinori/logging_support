@@ -45,6 +45,7 @@ initialize_simple_logger(
     name="example",
     dir="logs",
     fmt="%(levelname)s:%(name)s:%(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
     level="WARNING",
     handler_level=DEBUG,
     maxBytes=500,
@@ -59,7 +60,8 @@ initialize_simple_logger(
 | name | Set a name for logging. |
 | dir | Set a folder to save logging files. The default directory is 'logs'. |
 | filename | Set the file name for logging. The default file name is '{dir}/{name}.log'. |
-| fmt | This string sets the format for logging. |
+| fmt | This string sets the format for logging. The default format is "%(asctime)s %(levelname)s %(name)s %(message)s" |
+| datefmt | Set the date format. The default is ISO-8601 Format. |
 | level | Set the level of logging. level must be an int or a str. |
 | handler_level | Set the level of the handler for logging. level must be an int or a str. |
 | maxBytes | File size for logging. The default is 500 bytes. |
@@ -137,8 +139,8 @@ mypackage.hello()
 This library displays log data on the console.
 
 ```bash
-DEBUG:main:message
-DEBUG:mypackage:hello, world!
+2023-05-27T07:20:32.798+09:00 DEBUG main message
+2023-05-27T07:20:32.798+09:00 DEBUG mypackage hello, world!
 ```
 
 In addition, it outputs log data as files `logs/main.log` and `logs/mypackage.log` in the case of Example.
