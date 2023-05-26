@@ -43,8 +43,8 @@ initialize_logger(
 | dir | Set a folder to save logging files. The default directory is 'logs'. |
 | filename | Set the file name for logging. The default file name is '{dir}/{name}.log'. |
 | fmt | This string sets the format for logging. |
-| level | Set the level of logging. |
-| handler_level | Set the level of the handler for logging. |
+| level | Set the level of logging. level must be an int or a str. |
+| handler_level | Set the level of the handler for logging. level must be an int or a str. |
 
 ### 2.5 Logging
 
