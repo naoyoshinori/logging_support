@@ -2,7 +2,23 @@ import logging
 import logging.handlers
 import os
 
+from datetime import datetime, timezone
+
 FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+
+
+class ISO8601_Formatter(logging.Formatter):
+    def formatTime(self, record, datefmt=None):
+        if datefmt:
+            s = super().formatTime(record, datefmt)
+        else:
+            # Adopt the ISO-8601 Format for Timestamps
+            s = (
+                datetime.fromtimestamp(record.created, timezone.utc)
+                .astimezone()
+                .isoformat(sep="T", timespec="milliseconds")
+            )
+        return s
 
 
 def initialize_simple_logger(
@@ -10,6 +26,7 @@ def initialize_simple_logger(
     dir: str = "logs",
     filename: str = None,
     fmt: str = FORMAT,
+    datefmt: str = None,
     level: int | str = logging.WARNING,
     handler_level: int | str = logging.NOTSET,
     maxBytes: int = 500,
@@ -26,6 +43,7 @@ def initialize_simple_logger(
             The default file name is '{dir}/{name}.log'.
         fmt: This string sets the format for logging.
             The default format is "%(asctime)s %(levelname)s %(name)s %(message)s"
+        datefmt: Set the date format. The default is ISO-8601 Format.
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
         maxBytes: File size for logging. The default is 500 bytes.
@@ -37,7 +55,7 @@ def initialize_simple_logger(
 
     os.makedirs(dir, exist_ok=True)
 
-    formatter = logging.Formatter(fmt)
+    formatter = ISO8601_Formatter(fmt, datefmt=datefmt)
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
