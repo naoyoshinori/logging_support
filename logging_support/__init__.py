@@ -4,7 +4,7 @@ import os
 
 from datetime import datetime, timezone
 
-FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+DEFAULT_FORMAT = "%(asctime)s %(levelname)s %(name)s - %(message)s"
 
 
 class ISO8601_Formatter(logging.Formatter):
@@ -25,7 +25,7 @@ def initialize_simple_logger(
     name: str,
     dir: str = "logs",
     filename: str = None,
-    fmt: str = FORMAT,
+    fmt: str = DEFAULT_FORMAT,
     datefmt: str = None,
     level: int | str = logging.WARNING,
     handler_level: int | str = logging.NOTSET,
@@ -42,7 +42,7 @@ def initialize_simple_logger(
         filename: Set the file name for logging.
             The default file name is '{dir}/{name}.log'.
         fmt: This string sets the format for logging.
-            The default format is "%(asctime)s %(levelname)s %(name)s %(message)s"
+            The default format is "%(asctime)s %(levelname)s %(name)s - %(message)s"
         datefmt: Set the date format. The default is ISO-8601 Format.
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
