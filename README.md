@@ -48,7 +48,7 @@ initialize_simple_logger(
     datefmt="%Y-%m-%dT%H:%M:%S",
     level="WARNING",
     handler_level=DEBUG,
-    maxBytes=500,
+    maxBytes=0x7FFF,
     backupCount=2,
 )
 ```
@@ -64,7 +64,7 @@ initialize_simple_logger(
 | datefmt | Set the date format. The default is ISO-8601 Format. |
 | level | Set the level of logging. level must be an int or a str. |
 | handler_level | Set the level of the handler for logging. level must be an int or a str. |
-| maxBytes | File size for logging. The default is 500 bytes. |
+| maxBytes | File size for logging. The default is 32767(0x7FFF) bytes. |
 | backupCount | Backup counts for logging. The default is two files. |
 
 ### 2.5 Logging

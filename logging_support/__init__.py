@@ -29,7 +29,7 @@ def initialize_simple_logger(
     datefmt: str = None,
     level: int | str = logging.WARNING,
     handler_level: int | str = logging.NOTSET,
-    maxBytes: int = 500,
+    maxBytes: int = 0x7FFF,
     backupCount: int = 2,
 ) -> None:
     """
@@ -46,7 +46,7 @@ def initialize_simple_logger(
         datefmt: Set the date format. The default is ISO-8601 Format.
         level: Set the level of logging.
         handler_level: Set the level of the handler for logging.
-        maxBytes: File size for logging. The default is 500 bytes.
+        maxBytes: File size for logging. The default is 32767(0x7FFF) bytes.
         backupCount: Backup counts for logging. The default is two files.
     """
 
