@@ -1,9 +1,30 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "logging_support"
-description = "logging support package"
-version = "0.1.0"
-authors = [
-    { name = "Naoyuki Yoshinori", email = "1448309+naoyoshinori@users.noreply.github.com" },
+version = "1.0.0"
+dependencies = [
 ]
+requires-python = ">=3.10"
+authors = [
+    { name = "Naoyuki Yoshinori", email = "1448309+naoyoshinori@users.noreply.github.com" }
+]
+description = "A simple Python library for logging with console and file output"
 readme = "README.md"
 license = { file = "LICENSE" }
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "build>=1.0.0",
+    "twine>=4.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/naoyoshinori/logging_support"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -v"

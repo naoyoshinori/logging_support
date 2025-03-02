@@ -1,31 +1,40 @@
 # logging_support
 
-[logging_support](https://github.com/naoyoshinori/logging_support) is a simple logging library for Python. This library outputs log data to both the console and a file. Logging is configured on a module-by-module basis, without using the `basicConfig` of the Python standard library [logging](https://docs.python.org/3/library/logging.html).
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-## 1. Install
+[logging_support](https://github.com/naoyoshinori/logging_support) is a simple Python library for logging. It outputs logs to both the console and a file without relying on the standard Python [logging.basicConfig](https://docs.python.org/3/library/logging.html). Logging can be configured between different modules.
+
+## 1. Requirements
+- Python 3.10 or higher (for full type hint support)
+
+## 2. Installation
+
+Install directly from GitHub:
 
 ```bash
 pip install https://github.com/naoyoshinori/logging_support/archive/main.zip
 ```
 
-## 2. Usage
+## 3. Usage
 
-### 2.1 Import packages
+### 3.1 Import Packages
 
-For logging in the main program.
+For the main program:
 
 ```python
 from logging import getLogger, WARNING, INFO, DEBUG
 from logging_support import initialize_simple_logger
 ```
 
-For logging with the module.
+For modules:
 
 ```python
 from logging import getLogger
 ```
 
-### 2.2 Create Logger
+### 3.2 Create Logger
+
+Return a logger with the specified name. You can use the module name by using `__name__` in the logger name.
 
 ```python
 logger = getLogger(__name__)
@@ -33,79 +42,63 @@ logger = getLogger(__name__)
 logger = getLogger("example")
 ```
 
-The module name can be set by using `__name__` in the logger name.
+### 3.3 Initialize Simple Logger
 
-### 2.3 Initialize Simple Logger
-
-Initialize the logger in the main program as follows. Set the module name to `name`. Set `dir` to the directory where log data is stored.
-
+Initialize the logger with custom settings. This function returns a configured logger.
 
 ```python
-initialize_simple_logger(
+logger = initialize_simple_logger(
     name="example",
-    dir="logs",
-    fmt="%(levelname)s:%(name)s:%(message)s",
-    datefmt="%Y-%m-%dT%H:%M:%S",
-    level="WARNING",
-    handler_level=DEBUG,
-    maxBytes=0x7FFF,
-    backupCount=2,
+    log_dir="logs",
+    fmt="%(asctime)s %(levelname)s %(name)s - %(message)s", # Custom format
+    datefmt="%Y-%m-%dT%H:%M:%S", # Custom date format
+    level="DEBUG",
+    file_handler_level=WARNING, # File logs warnings and above
+    maxBytes=1024 * 1024, # 1MB (default is 10MB)
+    backupCount=5, # 5 log files (default is 2)
 )
 ```
 
-### 2.4 List of options.
+#### Options
 
-| Keyword | Description |
+| Parameter | Description |
 |---|---|
-| name | Set a name for logging. |
-| dir | Set a folder to save logging files. The default directory is 'logs'. |
-| filename | Set the file name for logging. The default file name is '{dir}/{name}.log'. |
-| fmt | This string sets the format for logging. The default format is "%(asctime)s %(levelname)s %(name)s - %(message)s" |
-| datefmt | Set the date format. The default is ISO-8601 Format. |
-| level | Set the level of logging. level must be an int or a str. |
-| handler_level | Set the level of the handler for logging. level must be an int or a str. |
-| maxBytes | File size for logging. The default is 32767(0x7FFF) bytes. |
-| backupCount | Backup counts for logging. The default is two files. |
+| name | The name of the logger. |
+| log_dir | Directory for log files. Default: `"logs"`. |
+| filename | Log file name. Default: `"{log_dir}/{name}.log"`. |
+| fmt | Log message format. Default: `"%(asctime)s %(levelname)s %(name)s - %(message)s"`. |
+| datefmt | Date format. Default: ISO-8601 (e.g., `"2023-05-27T07:20:32.798+09:00"`). |
+| level | Logger level (int or str). Default: `logging.WARNING`. |
+| stream_handler_level | Stream handler level. Default: if `None`, the parameter `level` is used. |
+| file_handler_level | File handler level. Default: if `None`, the parameter `level` is used. |
+| maxBytes | Max file size before rotation. Default: `10MB`. |
+| backupCount | Number of backup log files. Default: `2`. |
 
-### 2.5 Logging
+### 3.4 Logging Messages
 
-For more information on logging, see the documentation of the Python standard library [logging](https://docs.python.org/3/library/logging.html).
+See [Python's logging docs](https://docs.python.org/3/library/logging.html) for details. Use standard logging methods:
 
-```python
-logger.debug("debug message.")
-logger.info("info message.")
-logger.warning("warning message.")
-logger.error("error message.")
-```
-
-### 2.6 For third-party libraries
-
-Log output can also be configured in third-party libraries.
 
 ```python
-from logging import getLogger, WARNING, INFO, DEBUG
-from logging_support import initialize_simple_logger
-
-import selenium
-
-initialize_simple_logger(name="selenium", level=DEBUG)
-  or
-initialize_simple_logger(name=selenium.__name__, level=DEBUG)
+logger.debug("Debug message")
+logger.info("Info message")
+logger.warning("Warning message")
+logger.error("Error message")
 ```
 
-## 3. Example
+## 4. Example
 
-The directory structure of Example.
+### 4.1 Directory Structure
 
 ```bash
-example
-│  example.py
+example/
+│  example_usage.py
 │  
-└─mypackage
+└─mypackage/
    __init__.py
 ```
 
-Here is an example of mypackage, which uses `getLogger` from the Python standard logging library.
+### 4.2 Module Example
 
 ```python
 # mypackage/__init__.py
@@ -114,45 +107,88 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 def hello():
-    logger.debug("hello, world!")
+    logger.debug("Hello, world!")
 ```
 
-Here is an example of the main program. Here we initialize the logger for each module, using `basicConfig` from the Python standard library logging, there is a problem with all logs being output.
+### 4.3 Main Program
 
 ```python
-# example.py
+# example_usage.py
 from logging import getLogger, WARNING, INFO, DEBUG
 from logging_support import initialize_simple_logger
 
 import mypackage
 
-logger = getLogger("main")
+# Main logger with different levels for stream and file
+logger = initialize_simple_logger(
+    name="main",
+    level=DEBUG,
+    stream_handler_level=INFO,  # Console logs info and above
+    file_handler_level=WARNING  # File logs warnings and above
+)
 
-initialize_simple_logger(name="main", level=DEBUG)
+# Module-specific logger
 initialize_simple_logger(name=mypackage.__name__, level=DEBUG)
 
-logger.debug("message")
-
-mypackage.hello()
+logger.debug("This is a debug message")  # Not displayed
+logger.info("This is an info message")   # Only in file (if level allows)
+logger.warning("This is a warning")      # Console and file
+mypackage.hello()                        # Depends on mypackage logger
 ```
 
-This library displays log data on the console.
+### 4.4 Output
+
+#### Console:
 
 ```bash
-2023-05-27T07:20:32.798+09:00 DEBUG main - message
-2023-05-27T07:20:32.798+09:00 DEBUG mypackage - hello, world!
+2025-03-02T18:01:28.413+09:00 INFO main - This is an info message
+2025-03-02T18:01:28.414+09:00 WARNING main - This is a warning
+2025-03-02T18:01:28.414+09:00 DEBUG mypackage - Hello, world!
 ```
 
-In addition, it outputs log data as files `logs/main.log` and `logs/mypackage.log` in the case of Example.
+#### File `logs/main.log`:
 
 ```bash
-example
-│  example.py
-│  
-├─mypackage
-│  __init__.py
-│      
-└─logs
-   main.log
-   mypackage.log
+2025-03-02T18:01:28.414+09:00 WARNING main - This is a warning
+```
+
+Files are stored in `logs/` with rotation (e.g. `main.log`, `main.log.1` etc.).
+
+## 5. Features
+- Logging can be configured for different modules.
+- Supports standard output and file output.
+- Supports log file rotation.
+- Uses ISO-8601 as default date format.
+
+## 6. Development
+
+### 6.1 Virtual Environment Setup
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+```
+
+### 6.2 Dependencies Installation
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+### 6.3 Test Execution
+
+```bash
+pytest
+```
+
+### 6.4 Package Build
+
+```bash
+python -m build
 ```
