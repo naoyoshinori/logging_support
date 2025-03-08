@@ -2,6 +2,10 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
+> [!WARNING]
+> [ 2025/3/8 ]
+> This library has been released to PyPI as nysimplelog. See [nysimplelog](https://github.com/naoyoshinori/nysimplelog) for details.
+
 [logging_support](https://github.com/naoyoshinori/logging_support) is a simple Python library for logging. It outputs logs to both the console and a file without relying on the standard Python [logging.basicConfig](https://docs.python.org/3/library/logging.html). Logging can be configured between different modules.
 
 ## 1. Requirements
