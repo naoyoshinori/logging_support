@@ -5,7 +5,9 @@
 [logging_support](https://github.com/naoyoshinori/logging_support) is a simple Python library for logging. It outputs logs to both the console and a file without relying on the standard Python [logging.basicConfig](https://docs.python.org/3/library/logging.html). Logging can be configured between different modules.
 
 ## 1. Requirements
+
 - Python 3.10 or higher (for full type hint support)
+- tzdata (required on Windows for timezone support)
 
 ## 2. Installation
 
@@ -52,6 +54,7 @@ logger = initialize_simple_logger(
     log_dir="logs",
     fmt="%(asctime)s %(levelname)s %(name)s - %(message)s", # Custom format
     datefmt="%Y-%m-%dT%H:%M:%S", # Custom date format
+    tz="Asia/Tokyo"
     level="DEBUG",
     file_handler_level=WARNING, # File logs warnings and above
     maxBytes=1024 * 1024, # 1MB (default is 10MB)
@@ -68,16 +71,20 @@ logger = initialize_simple_logger(
 | filename | Log file name. Default: `"{log_dir}/{name}.log"`. |
 | fmt | Log message format. Default: `"%(asctime)s %(levelname)s %(name)s - %(message)s"`. |
 | datefmt | Date format. Default: ISO-8601 (e.g., `"2023-05-27T07:20:32.798+09:00"`). |
+| tz | Timezone for log timestamps (e.g., "UTC", "Asia/Tokyo"). Default: None (local time). |
+| formatter | Custom formatter. Default: None (uses ISO8601_Formatter). |
 | level | Logger level (int or str). Default: `logging.WARNING`. |
 | stream_handler_level | Stream handler level. Default: if `None`, the parameter `level` is used. |
 | file_handler_level | File handler level. Default: if `None`, the parameter `level` is used. |
 | maxBytes | Max file size before rotation. Default: `10MB`. |
 | backupCount | Number of backup log files. Default: `2`. |
 
+> [!NOTE]
+> On Windows, run `pip install tzdata` to use the `tz` parameter with specific timezones.
+
 ### 3.4 Logging Messages
 
 See [Python's logging docs](https://docs.python.org/3/library/logging.html) for details. Use standard logging methods:
-
 
 ```python
 logger.debug("Debug message")
@@ -155,6 +162,7 @@ mypackage.hello()                        # Depends on mypackage logger
 Files are stored in `logs/` with rotation (e.g. `main.log`, `main.log.1` etc.).
 
 ## 5. Features
+
 - Logging can be configured for different modules.
 - Supports standard output and file output.
 - Supports log file rotation.
@@ -192,3 +200,6 @@ pytest
 ```bash
 python -m build
 ```
+
+## 7. Author
+Developed by Naoyuki Yoshinori
